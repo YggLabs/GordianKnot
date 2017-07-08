@@ -33,32 +33,38 @@ public class GordianKnot {
     static class CareerContextCalculator implements ContextCalculator<Subject> {
 
         public static Set<Context> rootContext = ImmutableSet.of();
-        public static String contextType = "career";
-        public static Context engineer = new Context(contextType, "engineer");
-        public static Context explorer = new Context(contextType, "explorer");
+        public static String contextType = "career".toLowerCase(Locale.ENGLISH);
+        public static Context engineer = new Context(contextType, "engineer".toLowerCase(Locale.ENGLISH));
+        public static Context explorer = new Context(contextType, "explorer".toLowerCase(Locale.ENGLISH));
         public static Set<Context> validContexts = ImmutableSet.of(engineer, explorer);
 
-        private Context getContext(Subject subject){
+        private Context getContext(Subject subject) {
             Optional<String> currentCareer = subject.getOption(rootContext, contextType);
-            if(currentCareer.isPresent()){
+            if (currentCareer.isPresent()) {
                 String career = currentCareer.get();
-                boolean isEng = career.toLowerCase(Locale.US).equals(engineer.getName().toLowerCase(Locale.ENGLISH));
-                boolean isExp = career.toLowerCase(Locale.US).equals(explorer.getName().toLowerCase(Locale.ENGLISH));
-                if (isEng) return engineer;
-                if (isExp) return explorer;
+                boolean isEng = career.equals(engineer.getName());
+                boolean isExp = career.equals(explorer.getName());
+                if (isEng) {
+                    return engineer;
+                }
+                if (isExp) {
+                    return explorer;
+                }
             }
             return null;
         }
 
         @Override public void accumulateContexts(Subject calculable, Set<Context> accumulator) {
             Context careerContext = getContext(calculable);
-            if(careerContext != null){
+            if (careerContext != null) {
                 accumulator.add(careerContext);
             }
         }
 
         @Override public boolean matches(Context context, Subject subject) {
-            if(!validContexts.contains(context)) return false;
+            if (!validContexts.contains(context)) {
+                return false;
+            }
             return getContext(subject) == context;
         }
     }
