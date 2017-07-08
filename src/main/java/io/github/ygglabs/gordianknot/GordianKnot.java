@@ -1,4 +1,4 @@
-package com.ryantheleach.gordianknot;
+package io.github.ygglabs.gordianknot;
 
 import com.google.common.collect.ImmutableSet;
 import org.spongepowered.api.event.Listener;
